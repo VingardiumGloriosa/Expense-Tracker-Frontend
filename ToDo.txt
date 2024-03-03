@@ -1,0 +1,9 @@
+General To Do
+Main page
+- Home -> General expense overview (graph with categories?)
+- DONE Expenses -> list of all Expenses
+- DONE buttom somewhere to ADD Expense
+- settings to add category
+
+Expense specific CRUD
+Category specific CRUD
