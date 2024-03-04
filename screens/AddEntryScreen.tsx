@@ -7,6 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import { addEntry } from '../store/entriesSlice'; // Make sure you have an addEntry action in your Redux slice
 import { Entry } from '../interfaces/entry';
+import Config from 'react-native-config';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEntry'>;
 
@@ -33,11 +34,12 @@ const AddEntryScreen = ({ navigation }: Props) => {
     const handleSave = () => {
         const submissionData = {
             ...form,
+            categoryName: 'DefaultCategory',
             date: new Date(form.date).toISOString() // Convert back to ISO string for backend
         };
 
         // Use axios.post to add a new entry
-        axios.post('http://192.168.8.5:3000/entry', submissionData)
+        axios.post((process.env.BASE_URL || 'localhost:3000') + '/entry', submissionData)
             .then(() => {
                 dispatch(addEntry(submissionData)); // Adjust according to your Redux store
                 navigation.goBack();

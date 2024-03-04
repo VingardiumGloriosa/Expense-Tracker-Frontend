@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Entry } from '../interfaces/entry';
 import { RootStackParamList } from '../App';
 import { RootState } from '../store/store';
+import Config from 'react-native-config';
 
 type EntryListScreenProps = NativeStackScreenProps<RootStackParamList, 'EntryList'>;
 
@@ -15,8 +16,9 @@ const EntryListScreen = ({ navigation }: EntryListScreenProps) => {
     const entries = useSelector((state: RootState) => state.entries.entries);
 
     useEffect(() => {
-        axios.get('http://192.168.8.5:3000/entry')
+        axios.get((process.env.BASE_URL || 'localhost:3000') + '/entry')
             .then(response => {
+                console.log((process.env.BASE_URL || 'localhost:3000') + '/entry', response);
                 dispatch(setEntries(response.data));
             })
             .catch(error => {
