@@ -7,6 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import { updateEntry, deleteEntry } from '../store/entriesSlice';
 import { Entry } from '../interfaces/entry';
+import Config from 'react-native-config';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EntryEdit'>;
 
@@ -32,7 +33,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
         setForm({ ...form, date: currentDate });
     };
     useEffect(() => {
-        axios.get(`http://192.168.8.5:3000/entry/${entryId}`)
+        axios.get((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`)
             .then(response => {
                 const data = response.data;
                 setForm({
@@ -51,7 +52,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
             date: new Date(form.date).toISOString() // Convert back to ISO string for backend
         };
 
-        axios.patch(`http://192.168.8.5:3000/entry/${entryId}`, submissionData)
+        axios.patch((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`, submissionData)
             .then(() => {
                 dispatch(updateEntry(submissionData));
                 navigation.goBack();
@@ -62,7 +63,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
     };
 
     const handleDelete = () => {
-        axios.delete(`http://192.168.8.5:3000/entry/${entryId}`)
+        axios.delete((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`)
             .then(() => {
                 dispatch(deleteEntry(entryId));
                 navigation.goBack();

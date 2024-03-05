@@ -12,6 +12,9 @@ import { store } from './store/store'
 import { Provider } from 'react-redux'
 import { Counter } from './components/counter';
 import { Categories } from './screens/Categories';
+import dotenv from 'dotenv';
+
+// dotenv.config();
 
 export type RootStackParamList = {
   EntryList: undefined;
