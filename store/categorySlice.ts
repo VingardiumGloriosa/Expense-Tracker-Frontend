@@ -4,11 +4,11 @@ import { Category } from '../entities/category'
 import { CategoriesAPI } from '../api/categoriesAPI'
 import { CreateCategoryDTO } from '../entities/CreateCategoryDTO'
 
-export interface CategoryState {
+export interface CategoriesState {
   categories: Category[]
 }
 
-const initialState: CategoryState = {
+const initialState: CategoriesState = {
   categories: [],
 }
 
@@ -40,6 +40,9 @@ export const categorySlice = createSlice({
     // incrementByAmount: (state, action: PayloadAction<number>) => {
     //   state.value += action.payload
     // },
+    setCategories: (state, action: PayloadAction<Category[]>) => {
+      state.categories = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -62,6 +65,6 @@ export const categorySlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // ACTIONS
-export const {  } = categorySlice.actions
+export const { setCategories  } = categorySlice.actions
 
 export default categorySlice.reducer

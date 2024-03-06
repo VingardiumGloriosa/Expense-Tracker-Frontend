@@ -4,9 +4,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App';
-import { updateEntry, deleteEntry } from '../store/entriesSlice';
-import { Entry } from '../interfaces/entry';
+import { RootStackParamList } from '../../App';
+import { updateEntry, deleteEntry } from '../../store/entriesSlice';
+import { Entry } from '../../interfaces/entry';
 import Config from 'react-native-config';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EntryEdit'>;

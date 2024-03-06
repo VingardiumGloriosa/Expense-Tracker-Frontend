@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 const EntryDeleteScreen = () => {
     return (
         <View>
-            <Text>Welcome to the EntryListScreen!</Text>
+            <Text>Deleting!</Text>
         </View>
     );
 };
