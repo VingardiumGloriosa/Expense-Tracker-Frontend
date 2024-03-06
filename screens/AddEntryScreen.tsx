@@ -34,10 +34,10 @@ const AddEntryScreen = ({ navigation }: Props) => {
     const handleSave = () => {
         const submissionData = {
             ...form,
-            categoryName: 'DefaultCategory',
+            categoryId: 1,
             date: new Date(form.date).toISOString() // Convert back to ISO string for backend
         };
-
+        console.log(submissionData);
         // Use axios.post to add a new entry
         axios.post((process.env.BASE_URL || 'localhost:3000') + '/entry', submissionData)
             .then(() => {
