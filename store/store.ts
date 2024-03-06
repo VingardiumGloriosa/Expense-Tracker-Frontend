@@ -1,15 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './counterSlice';
 import categoryReducer from './categorySlice';
-import entriesReducer from './entriesSlice'; // Import the entries reducer
+import entriesReducer from './entriesSlice';
+import thunk from 'redux-thunk';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     categories: categoryReducer,
-    entries: entriesReducer, 
-  },
-});
+    entries: entriesReducer,
+  }});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -11,9 +11,11 @@ import {
 } from "react-native";
 import { AppDispatch, RootState } from "../store/store";
 import { decrement, increment } from "../store/counterSlice";
-import { createCategory, fetchCategories } from "../store/categorySlice";
+import { createCategory, fetchCategories, setCategories } from "../store/categorySlice";
 import { CategoryItem } from "../components/CategoryItem";
 import { Category } from "../entities/category";
+import axios from 'axios';
+
 import { CreateCategoryDTO } from "../entities/CreateCategoryDTO";
 
 
@@ -29,6 +31,17 @@ export function Categories() {
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
+
+//   useEffect(() => {
+//     axios.get((process.env.BASE_URL || 'localhost:3000') + '/category')
+//         .then(response => {
+//             console.log((process.env.BASE_URL || 'localhost:3000') + '/category', response);
+//             dispatch(setCategories(response.data));
+//         })
+//         .catch(error => {
+//             console.error("There was an error fetching the categories:", error);
+//         });
+// }, [dispatch]);
 
   return (
     <View>

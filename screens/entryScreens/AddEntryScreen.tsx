@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Platform, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App';
-import { updateEntry, deleteEntry } from '../store/entriesSlice';
-import { Entry } from '../interfaces/entry';
+import { RootStackParamList } from '../../App';
+import { addEntry } from '../../store/entriesSlice'; // Make sure you have an addEntry action in your Redux slice
+import { Entry } from '../../interfaces/entry';
 import Config from 'react-native-config';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'EntryEdit'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'AddEntry'>;
 
-
-const EntryEditScreen = ({ route, navigation }: Props) => {
+const AddEntryScreen = ({ navigation }: Props) => {
     const dispatch = useDispatch();
-    const { entryId } = route.params;
 
     const [form, setForm] = useState<Entry>({
-        id: 0,
+        id: 0, // This might not be necessary depending on how your backend handles IDs
         name: '',
         amount: 0,
         currency: '',
@@ -32,50 +30,28 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
         setShowDatePicker(Platform.OS === 'ios');
         setForm({ ...form, date: currentDate });
     };
-    useEffect(() => {
-        axios.get((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`)
-            .then(response => {
-                const data = response.data;
-                setForm({
-                    ...data,
-                    date: new Date(data.date).toISOString().substring(0, 10), // Convert to "YYYY-MM-DD"
-                });
-            })
-            .catch(error => {
-                console.error("There was an error fetching the entry:", error);
-            });
-    }, [entryId]);
 
     const handleSave = () => {
         const submissionData = {
             ...form,
+            categoryId: 1,
             date: new Date(form.date).toISOString() // Convert back to ISO string for backend
         };
-
-        axios.patch((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`, submissionData)
+        console.log(submissionData);
+        // Use axios.post to add a new entry
+        axios.post((process.env.BASE_URL || 'localhost:3000') + '/entry', submissionData)
             .then(() => {
-                dispatch(updateEntry(submissionData));
+                dispatch(addEntry(submissionData)); // Adjust according to your Redux store
                 navigation.goBack();
             })
             .catch(error => {
-                console.error("There was an error updating the entry:", error);
-            });
-    };
-
-    const handleDelete = () => {
-        axios.delete((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`)
-            .then(() => {
-                dispatch(deleteEntry(entryId));
-                navigation.goBack();
-            })
-            .catch(error => {
-                console.error("There was an error deleting the entry:", error);
+                console.error("There was an error adding the entry:", error);
             });
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Edit Entry</Text>
+            <Text style={styles.title}>Add Entry</Text>
             <TextInput
                 style={styles.input}
                 value={form.name}
@@ -96,7 +72,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
                 placeholder="Currency"
             />
             <View>
-                <Button onPress={() => setShowDatePicker(true)} title="Change Date" />
+                <Button onPress={() => setShowDatePicker(true)} title="Set Date" />
                 {showDatePicker && (
                     <DateTimePicker
                         testID="dateTimePicker"
@@ -117,7 +93,6 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
                 placeholder="Comment"
             />
             <Button title="Save" onPress={handleSave} />
-            <Button title="Delete" onPress={handleDelete} color="red" />
         </View>
     );
 };
@@ -141,4 +116,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EntryEditScreen;
+export default AddEntryScreen;
