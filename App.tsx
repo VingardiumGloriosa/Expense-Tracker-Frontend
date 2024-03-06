@@ -10,6 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { store } from './store/store'
 import { Provider } from 'react-redux'
 import { Categories } from './screens/Categories';
+import dotenv from 'dotenv';
 
 // dotenv.config();
 
