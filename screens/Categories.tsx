@@ -7,11 +7,12 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { AppDispatch, RootState } from "../store/store";
-import { decrement, increment } from "../store/counterSlice";
-import { createCategory, fetchCategories, setCategories } from "../store/categorySlice";
+//import { decrement, increment } from "../store/counterSlice";
+import { createCategory, deleteCategory, fetchCategories, setCategories } from "../store/categorySlice";
 import { CategoryItem } from "../components/CategoryItem";
 import { Category } from "../entities/category";
 import axios from 'axios';
@@ -32,6 +33,11 @@ export function Categories() {
     dispatch(fetchCategories());
   }, []);
 
+  // Function to handle category press
+  const handlePressCategory = (categoryId: any) => {
+    dispatch(deleteCategory(categoryId));
+  };
+
 //   useEffect(() => {
 //     axios.get((process.env.BASE_URL || 'localhost:3000') + '/category')
 //         .then(response => {
@@ -43,30 +49,26 @@ export function Categories() {
 //         });
 // }, [dispatch]);
 
-  return (
-    <View>
-      <TextInput  style={styles.input} onChangeText={onChangeText} value={text} />
-      <Button title="Create Category" onPress={() => dispatch(createCategory(new CreateCategoryDTO(text)))} />
-
-      <SafeAreaView>
-        <FlatList
-          data={categories}
-          renderItem={({ item }) => <CategoryItem name={item.name} />}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </SafeAreaView>
-      {/* <Button
-            title="Increment"
-            onPress={() => dispatch(increment())}
-        />
-        <Text>{count}</Text>
-        <Button
-            title="Decrement"
-            onPress={() => dispatch(decrement())}
-        /> */}
-    </View>
-  );
+return (
+  <View>
+    <TextInput style={styles.input} onChangeText={onChangeText} value={text} />
+    <Button title="Create Category" onPress={() => dispatch(createCategory(new CreateCategoryDTO(text)))} />
+    <SafeAreaView>
+      <FlatList
+        data={categories}
+        renderItem={({ item }) => (
+          // Wrap CategoryItem with TouchableOpacity
+          <TouchableOpacity onPress={() => handlePressCategory(item.id)}>
+            <CategoryItem name={item.name} />
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </SafeAreaView>
+  </View>
+);
 }
+
 const styles = StyleSheet.create({
   input: {
     height: 40,
