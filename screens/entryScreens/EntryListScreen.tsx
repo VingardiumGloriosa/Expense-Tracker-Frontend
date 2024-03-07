@@ -40,9 +40,10 @@ const EntryListScreen = ({ navigation }: EntryListScreenProps) => {
       <FlatList
         data={entries}
         keyExtractor={(item) => item.id.toString()}
+        style={styles.list}
         renderItem={({ item }) => (
           <ExpenseItem
-            title={`${item.name} - ${item.amount} ${item.currency}`}
+            item={item}
             onPress={() => navigation.navigate('EntryEdit', { entryId: item.id })}
           />
         )}
@@ -58,6 +59,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
+    width: '100%'
+  },
+  list: {
+    width: '100%'
   },
   newExpenseButton: {
     padding: 15,

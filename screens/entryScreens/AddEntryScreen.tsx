@@ -8,6 +8,8 @@ import { RootStackParamList } from '../../App';
 import { addEntry } from '../../store/entriesSlice'; // Make sure you have an addEntry action in your Redux slice
 import { Entry } from '../../interfaces/entry';
 import Config from 'react-native-config';
+import { Category } from '../../entities/category';
+import CategorySelector from '../../components/CategorySelector';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEntry'>;
 
@@ -15,10 +17,11 @@ const AddEntryScreen = ({ navigation }: Props) => {
     const dispatch = useDispatch();
 
     const [form, setForm] = useState<Entry>({
-        id: 0, // This might not be necessary depending on how your backend handles IDs
+        id: 0, 
         name: '',
         amount: 0,
         currency: '',
+        category: undefined,
         date: new Date().toISOString().substring(0, 10), // Ensure this matches your backend format
         comment: '',
     });
@@ -30,6 +33,10 @@ const AddEntryScreen = ({ navigation }: Props) => {
         setShowDatePicker(Platform.OS === 'ios');
         setForm({ ...form, date: currentDate });
     };
+
+    const handleCategorySelect = (category : Category) => {
+        setForm(prev => ({ ...prev, category }));
+    }
 
     const handleSave = () => {
         const submissionData = {
@@ -70,6 +77,10 @@ const AddEntryScreen = ({ navigation }: Props) => {
                 value={form.currency}
                 onChangeText={(text) => setForm({ ...form, currency: text })}
                 placeholder="Currency"
+            />
+            <CategorySelector
+                selectedCategoryId={form.category?.id}
+                onSelectCategory={handleCategorySelect}
             />
             <View>
                 <Button onPress={() => setShowDatePicker(true)} title="Set Date" />

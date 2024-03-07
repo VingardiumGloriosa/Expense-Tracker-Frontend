@@ -15,8 +15,8 @@ import dotenv from 'dotenv';
 // dotenv.config();
 
 export type RootStackParamList = {
-  // Expenses: undefined,
-  Entries: undefined;
+  Expenses: undefined,
+  // Entries: undefined;
   AddEntry: undefined;
   EntryEdit: { entryId: number };
   EntryDelete: { entryId: number };
@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const EntryStackNavigator = () => {
   return (
     <Stack.Navigator>
-        <Stack.Screen name="Entries" component={EntryListScreen} />
+        <Stack.Screen name="Expenses" component={EntryListScreen} />
         <Stack.Screen name="AddEntry" component={AddEntryScreen} />
         <Stack.Screen name="EntryEdit" component={EntryEditScreen} />
         <Stack.Screen name="EntryDelete" component={EntryDeleteScreen} />

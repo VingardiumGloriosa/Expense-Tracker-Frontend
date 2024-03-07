@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Platform, Alert, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -8,6 +8,8 @@ import { RootStackParamList } from '../../App';
 import { updateEntry, deleteEntry } from '../../store/entriesSlice';
 import { Entry } from '../../interfaces/entry';
 import Config from 'react-native-config';
+import { Category } from '../../entities/category';
+import CategorySelector from '../../components/CategorySelector';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EntryEdit'>;
 
@@ -21,9 +23,14 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
         name: '',
         amount: 0,
         currency: '',
+        category: undefined,
         date: new Date().toISOString().substring(0, 10), // Ensure this matches your backend format
         comment: '',
     });
+
+    const handleCategorySelect = (category : Category) => {
+        setForm(prev => ({ ...prev, category }));
+    }
 
     const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -32,6 +39,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
         setShowDatePicker(Platform.OS === 'ios');
         setForm({ ...form, date: currentDate });
     };
+
     useEffect(() => {
         axios.get((process.env.BASE_URL || 'localhost:3000') + `/entry/${entryId}`)
             .then(response => {
@@ -74,7 +82,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>Edit Entry</Text>
             <TextInput
                 style={styles.input}
@@ -94,6 +102,10 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
                 value={form.currency}
                 onChangeText={(text) => setForm({ ...form, currency: text })}
                 placeholder="Currency"
+            />
+            <CategorySelector
+                selectedCategoryId={form.category?.id}
+                onSelectCategory={handleCategorySelect}
             />
             <View>
                 <Button onPress={() => setShowDatePicker(true)} title="Change Date" />
@@ -118,7 +130,7 @@ const EntryEditScreen = ({ route, navigation }: Props) => {
             />
             <Button title="Save" onPress={handleSave} />
             <Button title="Delete" onPress={handleDelete} color="red" />
-        </View>
+        </ScrollView>
     );
 };
 
@@ -130,11 +142,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
     },
     input: {
         height: 40,
-        marginVertical: 12,
+        marginVertical: 6,
         borderWidth: 1,
         borderColor: '#cccccc',
         padding: 10,

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { CreateCategoryDTO } from '../entities/CreateCategoryDTO';
+import { Category } from '../entities/category';
 
 export class CategoriesAPI {
 
-    static async fetchAll() {
+    static async fetchAll() : Promise<Category[]> {
         const response = await axios.get((process.env.BASE_URL || 'localhost:3000') + '/category')
         return response.data;
     }
